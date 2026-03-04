@@ -1,5 +1,5 @@
-## Student Name:
-## Student ID: 
+## Student Name: Elim Lemango
+## Student ID: 216689424
 
 """
 Public test suite for the meeting slot suggestion exercise.
@@ -46,3 +46,45 @@ def test_non_dict_request_raises():
         is_allocation_feasible(resources, requests)
 
 """TODO: Add at least 5 additional test cases to test your implementation."""
+
+def test_exact_capacity_boundary():
+    # Exact Capacity Boundary
+    # Constraint: total demand exactly equals capacity
+    # Reason: boundary condition should still be feasible
+    resources = {'cpu': 6}
+    requests = [{'cpu': 2}, {'cpu': 4}]
+    assert is_allocation_feasible(resources, requests) is True
+
+def test_empty_requests_list():
+    # Empty Requests
+    # Constraint: no requests should always be feasible
+    # Reason: nothing requested means no overload possible
+    resources = {'cpu': 5, 'mem': 10}
+    requests = []
+    assert is_allocation_feasible(resources, requests) is True
+
+def test_negative_request_amount_raises():
+    # Negative Request Amount
+    # Constraint: requests must be non-negative
+    # Reason: negative allocation is invalid input
+    resources = {'cpu': 5}
+    requests = [{'cpu': -1}]
+    with pytest.raises(ValueError):
+        is_allocation_feasible(resources, requests)
+
+def test_negative_resource_capacity_raises():
+    # Negative Resource Capacity
+    # Constraint: resource capacities must be non-negative
+    # Reason: invalid availability definition
+    resources = {'cpu': -5}
+    requests = [{'cpu': 2}]
+    with pytest.raises(ValueError):
+        is_allocation_feasible(resources, requests)
+
+def test_zero_capacity_resource():
+    # Zero Capacity Resource
+    # Constraint: zero-capacity resources cannot be allocated
+    # Reason: any positive demand should make allocation infeasible
+    resources = {'cpu': 0}
+    requests = [{'cpu': 1}]
+    assert is_allocation_feasible(resources, requests) is False
